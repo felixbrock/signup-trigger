@@ -56,11 +56,7 @@ export const handler = async (
     const { userName } = event;
 
     const jwt = await getJwt();
-    
-    console.log(jwt);
-    
-    
-
+      
     const config: AxiosRequestConfig = {
       headers: { Authorization: `Bearer ${jwt}` },
     };

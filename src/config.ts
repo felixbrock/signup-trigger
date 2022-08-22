@@ -15,7 +15,7 @@ export interface AuthSchedulerEnvConfig {
 const getAuthSchedulerEnvConfig = (): AuthSchedulerEnvConfig => {
   switch (nodeEnv) {
     case 'development': {
-      const clientSecret = process.env.AUTH_SCHEDULER_CLIENT_SECRET_DEV || '';
+      const clientSecret = process.env.SYSTEM_INTERNAL_AUTH_CLIENT_SECRET_DEV || '';
       if (!clientSecret) throw new Error('auth client secret missing');
 
       const clientId = '3o029nji154v0bm109hkvkoi5h';
@@ -30,15 +30,15 @@ const getAuthSchedulerEnvConfig = (): AuthSchedulerEnvConfig => {
 
       const clientId = '';
       const tokenUrl = '';
-      return { clientSecret, clientId,  tokenUrl};
+      return { clientSecret, clientId, tokenUrl };
     }
     case 'production': {
-      const clientSecret = process.env.AUTH_SCHEDULER_CLIENT_SECRET_DEV || '';
+      const clientSecret = process.env.SYSTEM_INTERNAL_AUTH_CLIENT_SECRET_PROD || '';
       if (!clientSecret) throw new Error('auth client secret missing');
 
-      const clientId = '3o029nji154v0bm109hkvkoi5h';
-      const tokenUrl = 'https://auth-cito-dev.auth.eu-central-1.amazoncognito.com/oauth2/token';
-      return { clientSecret, clientId,  tokenUrl};
+      const clientId = '54n1ig9sb07d4d9tiihdi0kifq';
+      const tokenUrl = 'https://auth.citodata.com/oauth2/token';
+      return { clientSecret, clientId, tokenUrl };
     }
     default:
       throw new Error('node env misconfiguration');
