@@ -70,8 +70,8 @@ export const handler = async (
     };
 
     const createOrganizationResponse = await axios.post(
-      // `https://p2krek4fsj.execute-api.eu-central-1.amazonaws.com/production/api/v1/organization`,
-      `http://localhost:8081/api/v1/organization`,
+      `https://p2krek4fsj.execute-api.eu-central-1.amazonaws.com/production/api/v1/organization`,
+      // `http://localhost:8081/api/v1/organization`,
       organizationPayload,
       config
     );
@@ -84,8 +84,8 @@ export const handler = async (
     };
 
     const createAccountResponse = await axios.post(
-      // `https://p2krek4fsj.execute-api.eu-central-1.amazonaws.com/production/api/v1/account`,
-      `http://localhost:8081/api/v1/account`,
+      `https://p2krek4fsj.execute-api.eu-central-1.amazonaws.com/production/api/v1/account`,
+      // `http://localhost:8081/api/v1/account`,
       accountPayload,
       config
     );

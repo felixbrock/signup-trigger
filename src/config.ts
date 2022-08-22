@@ -33,11 +33,11 @@ const getAuthSchedulerEnvConfig = (): AuthSchedulerEnvConfig => {
       return { clientSecret, clientId,  tokenUrl};
     }
     case 'production': {
-      const clientSecret = process.env.AUTH_SCHEDULER_CLIENT_SECRET_PROD || '';
+      const clientSecret = process.env.AUTH_SCHEDULER_CLIENT_SECRET_DEV || '';
       if (!clientSecret) throw new Error('auth client secret missing');
 
-      const clientId = '';
-      const tokenUrl = '';
+      const clientId = '3o029nji154v0bm109hkvkoi5h';
+      const tokenUrl = 'https://auth-cito-dev.auth.eu-central-1.amazoncognito.com/oauth2/token';
       return { clientSecret, clientId,  tokenUrl};
     }
     default:
