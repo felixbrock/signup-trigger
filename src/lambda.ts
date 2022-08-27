@@ -72,7 +72,7 @@ export const handler = async (
       config
     );
 
-    if (createOrganizationResponse.status !== 201) console.warn(`Failed ot create organization for ${userName}`);
+    if (createOrganizationResponse.status !== 201) console.error(`Failed ot create organization for ${userName}`);
    
     const accountPayload: AccountDto = {
       userId: userName,
@@ -86,7 +86,7 @@ export const handler = async (
       config
     );
 
-    if (createAccountResponse.status !== 201) console.warn(`Failed ot create account for ${userName}`);
+    if (createAccountResponse.status !== 201) console.error(`Failed ot create account for ${userName}`);
     callback(null, event);
   } catch (error: any) {
     console.error(error.response.data.message);
