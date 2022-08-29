@@ -3,7 +3,8 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const nodeEnv = process.env.NODE_ENV || 'development';
+const mode = process.env.NODE_ENV || 'development';
+const port = 7012;
 
 
 export interface AuthSchedulerEnvConfig {
@@ -13,7 +14,7 @@ export interface AuthSchedulerEnvConfig {
 }
 
 const getAuthSchedulerEnvConfig = (): AuthSchedulerEnvConfig => {
-  switch (nodeEnv) {
+  switch (mode) {
     case 'development': {
       const clientSecret = process.env.SYSTEM_INTERNAL_AUTH_CLIENT_SECRET_DEV || '';
       if (!clientSecret) throw new Error('auth client secret missing');
@@ -46,6 +47,10 @@ const getAuthSchedulerEnvConfig = (): AuthSchedulerEnvConfig => {
 };
 
 export const appConfig = {
+  express: {
+    port,
+    mode,
+  },
   cloud: {
     authSchedulerEnvConfig: getAuthSchedulerEnvConfig(),
     region: 'eu-central-1',

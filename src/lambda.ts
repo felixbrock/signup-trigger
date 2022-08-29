@@ -1,16 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import crypto from 'crypto';
 import { appConfig } from './config';
-
-export interface AccountDto {
-  userId: string;
-  organizationId: string;
-  // eslint-disable-next-line semi
-}
-
-export interface OrganizationDto {
-  name: string;
-}
+import createAccount from './create-account';
+import isBusinessDomain from './is-business-domain';
 
 const getJwt = async (): Promise<string> => {
   try {
@@ -44,6 +35,7 @@ const getJwt = async (): Promise<string> => {
   }
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const handler = async (
   event: any,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,45 +44,23 @@ export const handler = async (
   callback: any
 ): Promise<void> => {
   try {
-
     const { userName } = event;
+    const { email } = event.request.userAttributes;
+    const providedDomain = email.split('@')[1];
 
-    const jwt = await getJwt();
-      
-    const config: AxiosRequestConfig = {
-      headers: { Authorization: `Bearer ${jwt}` },
-    };
+    const domainValid = await isBusinessDomain(providedDomain);
 
-    const organizationPayload: OrganizationDto = {
-      name: crypto.randomUUID()
-    };
+    if (!domainValid)
+      callback(`Please sign up with a valid business email address`, event);
+    else {
+      const jwt = await getJwt();
 
-    const createOrganizationResponse = await axios.post(
-      `https://p2krek4fsj.execute-api.eu-central-1.amazonaws.com/production/api/v1/organization`,
-      // `http://localhost:8081/api/v1/organization`,
-      organizationPayload,
-      config
-    );
+      await createAccount(userName, jwt);
 
-    if (createOrganizationResponse.status !== 201) console.error(`Failed ot create organization for ${userName}`);
-   
-    const accountPayload: AccountDto = {
-      userId: userName,
-      organizationId: createOrganizationResponse.data,
-    };
-
-    const createAccountResponse = await axios.post(
-      `https://p2krek4fsj.execute-api.eu-central-1.amazonaws.com/production/api/v1/account`,
-      // `http://localhost:8081/api/v1/account`,
-      accountPayload,
-      config
-    );
-
-    if (createAccountResponse.status !== 201) console.error(`Failed ot create account for ${userName}`);
-    callback(null, event);
+      callback(null, event);
+    }
   } catch (error: any) {
-    console.error(error.response.data.message);
+    if (typeof error === 'string') console.error(error);
+    else if (error instanceof Error) console.error(error.message);
   }
 };
-
-
