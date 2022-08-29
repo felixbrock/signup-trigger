@@ -51,7 +51,7 @@ export const handler = async (
     const domainValid = await isBusinessDomain(providedDomain);
 
     if (!domainValid)
-      callback(`Please sign up with a valid business email address`, event);
+      callback(`--> Please sign up with a business email address`, event);
     else {
       const jwt = await getJwt();
 
