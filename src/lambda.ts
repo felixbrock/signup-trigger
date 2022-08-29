@@ -62,5 +62,6 @@ export const handler = async (
   } catch (error: any) {
     if (typeof error === 'string') console.error(error);
     else if (error instanceof Error) console.error(error.message);
+    console.error('Unknown error occurred');
   }
 };
