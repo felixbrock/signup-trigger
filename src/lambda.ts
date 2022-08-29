@@ -50,15 +50,21 @@ export const handler = async (
 
     const domainValid = await isBusinessDomain(providedDomain);
 
-    if (!domainValid)
+    if (!domainValid){
       callback(`--> Please sign up with a business email address`, event);
-    else {
+      return;
+    }
+        
       const jwt = await getJwt();
 
-      await createAccount(userName, jwt);
+      const createAccountResult = await createAccount(userName, jwt);
+
+      if(!createAccountResult.success) {
+        callback(`--> ${createAccountResult.error}`, event);
+        return;
+      }
 
       callback(null, event);
-    }
   } catch (error: any) {
     if (typeof error === 'string') console.error(error);
     else if (error instanceof Error) console.error(error.message);

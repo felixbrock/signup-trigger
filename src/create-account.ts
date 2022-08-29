@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import crypto from 'crypto';
+import Result from './result';
 
 interface AccountPrototypeDto {
   userId: string;
@@ -16,7 +17,7 @@ export interface OrganizationDto {
   name: string;
 }
 
-export default async (username: string, jwt: string): Promise<void> => {
+export default async (username: string, jwt: string): Promise<Result<undefined>> => {
   try {
     const config: AxiosRequestConfig = {
       headers: { Authorization: `Bearer ${jwt}` },
@@ -41,7 +42,7 @@ export default async (username: string, jwt: string): Promise<void> => {
 
     const jsonResponse: AccountDto[] = readAccountsResponse.data;
 
-    if(jsonResponse.length) throw new Error(`Account for user ${username} already exists`);
+    if(jsonResponse.length) return Result.fail(`User already exists`);
 
     const createOrganizationResponse = await axios.post(
       `${accountServiceUrl}/${apiRoot}/organization`,
@@ -51,7 +52,7 @@ export default async (username: string, jwt: string): Promise<void> => {
     );
 
     if (createOrganizationResponse.status !== 201)
-      throw new Error(`Failed ot create organization for ${username}`);
+      throw new Error(`Failed to create organization for ${username}`);
 
     const accountPayload: AccountPrototypeDto = {
       userId: username,
@@ -67,9 +68,11 @@ export default async (username: string, jwt: string): Promise<void> => {
 
     if (createAccountResponse.status !== 201)
       throw new Error(`Failed ot create account for ${username}`);
+
+    return Result.ok();
   } catch (error: any) {
     if (typeof error === 'string') console.error(error);
     else if(error instanceof Error) console.error(error.message);
-    throw new Error('Account creation failed');
+    return Result.fail('We are very sorry, the account creation failed. The Cito team is happy to help you out! Please contact felix@citodata.com');
   }
 };
