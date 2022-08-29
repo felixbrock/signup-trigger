@@ -1,4 +1,4 @@
-service: test-signup-trigger
+service: signup-trigger
 useDotenv: true
 
 provider:
